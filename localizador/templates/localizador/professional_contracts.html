@@ -1,0 +1,85 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Contratos do Servidor - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Contratos do Servidor</h2>
+  
+  <!-- Campo de busca -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nome do profissional ou CPF...">
+    </div>
+    <div class="col-md-2">
+      <button type="button" id="clearSearch" class="btn btn-secondary">Limpar</button>
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nome do Profissional</th>
+        <th>CPF do Profissional</th>
+        <th>Matrícula</th>
+        <th>Função</th>
+        <th>Data Inicial</th>
+        <th>Data Final</th>
+        <th>Tipo de Contrato</th>
+      </tr>
+    </thead>
+    <tbody id="contratosTable">
+      {% for contrato in contratos %}
+      <tr data-nome="{{ contrato.profissional_arquivo.nome_profissional|lower }}" data-cpf="{{ contrato.profissional_arquivo.cpf|default:'' }}">
+        <td>{{ contrato.profissional_arquivo.nome_profissional }}</td>
+        <td>{{ contrato.profissional_arquivo.cpf }}</td>
+        <td>{{ contrato.matricula }}</td>
+        <td>{{ contrato.funcao }}</td>
+        <td>{{ contrato.dt_inicial|date:"d/m/Y" }}</td>
+        <td>{{ contrato.dt_final|date:"d/m/Y" }}</td>
+        <td>{{ contrato.tipo_contrato }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7">Nenhum contrato encontrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <a href="{% url 'professional_dashboard' %}" class="btn btn-secondary mt-3">Voltar ao Painel do Servidor</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearSearch');
+    const tableBody = document.getElementById('contratosTable');
+    const rows = tableBody.getElementsByTagName('tr');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const nome = row.getAttribute('data-nome') || '';
+            const cpf = row.getAttribute('data-cpf') || '';
+            
+            if (nome.includes(searchTerm) || cpf.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    
+    clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        filterTable();
+    });
+});
+</script>
+{% endblock %}
+

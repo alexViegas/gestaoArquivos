@@ -1,0 +1,20 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Confirmar Exclusão de Documento{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Confirmar Exclusão de Documento</h2>
+    <div class="alert alert-warning" role="alert">
+        Tem certeza de que deseja excluir o documento "<strong>{{ documento.nome_arquivo }}</strong>"?
+    </div>
+    
+    <p>Esta ação é irreversível e removerá o documento permanentemente.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+       <a href="{{ cancel_url }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

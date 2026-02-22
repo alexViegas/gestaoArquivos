@@ -1,0 +1,16 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Confirmar Exclusão da Pendência - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Confirmar Exclusão da Pendência</h2>
+  <p>Você tem certeza que deseja excluir a pendência "{{ pendencia.tipo_pendencia }} - {{ pendencia.descricao|truncatewords:5 }}" do aluno "{{ aluno.nome_aluno }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+    <a href="{% url 'student_pendencies_maintenance_list' aluno.id_aluno_arquivo %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
+

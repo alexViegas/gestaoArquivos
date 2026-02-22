@@ -1,0 +1,16 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Confirmar Exclusão do Aluno - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Confirmar Exclusão</h2>
+  <p>Você tem certeza que deseja excluir o aluno "{{ aluno.nome_aluno }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+    <a href="{% url 'student_personal_data_maintenance_list' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
+

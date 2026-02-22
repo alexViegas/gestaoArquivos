@@ -1,0 +1,47 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Manutenção de Pendências do Aluno {{ aluno.nome_aluno }} - Lista{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Pendências do Aluno: {{ aluno.nome_aluno }}</h2>
+  <a href="{% url 'student_pendencies_create' aluno.id_aluno_arquivo %}" class="btn btn-primary mb-3">Adicionar Nova Pendência</a>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Tipo da Pendência</th>
+        <th>Data de Lançamento</th>
+        <th>Descrição</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pendencia in pendencias %}
+      <tr>
+        <td>{{ pendencia.tipo_pendencia }}</td>
+        <td>{{ pendencia.dt_lancamento_pendencia|date:"d/m/Y" }}</td>
+        <td>{{ pendencia.descricao }}</td>
+        <td>
+          <a href="{% url 'student_pendencies_edit' aluno.id_aluno_arquivo pendencia.id_pendencia %}" class="btn btn-sm btn-warning">Editar</a>
+          <a href="{% url 'student_pendency_delete' aluno.id_aluno_arquivo pendencia.id_pendencia %}" class="btn btn-sm btn-danger">Excluir</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">Nenhuma pendência encontrada para este aluno.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'student_personal_data_maintenance_list' %}" class="btn btn-secondary mt-3">Voltar para Lista de Alunos</a>
+</div>
+{% endblock %}
+

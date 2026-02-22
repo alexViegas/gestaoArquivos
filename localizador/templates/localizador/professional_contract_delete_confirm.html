@@ -1,0 +1,16 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Confirmar Exclusão do Contrato - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Confirmar Exclusão do Contrato</h2>
+  <p>Você tem certeza que deseja excluir o contrato Matrícula: {{ contrato.matricula }}, Função: {{ contrato.funcao }} do servidor "{{ profissional.nome_profissional }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+    <a href="{% url 'professional_contracts_maintenance_list' profissional.id_profissional_arquivo %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
+

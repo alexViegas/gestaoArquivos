@@ -1,0 +1,51 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Manutenção de Contratos do Servidor {{ profissional.nome_profissional }} - Lista{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Contratos do Servidor: {{ profissional.nome_profissional }}</h2>
+  <a href="{% url 'professional_contracts_create' profissional.id_profissional_arquivo %}" class="btn btn-primary mb-3">Adicionar Novo Contrato</a>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Matrícula</th>
+        <th>Função</th>
+        <th>Data Inicial</th>
+        <th>Data Final</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contrato in contratos %}
+      <tr>
+        <td>{{ contrato.matricula }}</td>
+        <td>{{ contrato.funcao }}</td>
+        <td>{{ contrato.dt_inicial|date:"d/m/Y" }}</td>
+        <td>{{ contrato.dt_final|date:"d/m/Y" }}</td>
+        <td>{{ contrato.tipo_contrato }}</td>
+        <td>
+          <a href="{% url 'professional_contracts_edit' profissional.id_profissional_arquivo contrato.Id_numero_contrato %}" class="btn btn-sm btn-warning">Editar</a>
+          <a href="{% url 'professional_contract_delete' profissional.id_profissional_arquivo contrato.Id_numero_contrato %}" class="btn btn-sm btn-danger">Excluir</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6">Nenhum contrato encontrado para este servidor.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'professional_personal_data_maintenance_list' %}" class="btn btn-secondary mt-3">Voltar para Lista de Servidores</a>
+</div>
+{% endblock %}
+

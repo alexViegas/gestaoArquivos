@@ -1,0 +1,18 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Painel do Estudante - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Painel do Estudante</h2>
+  <p>Bem-vindo(a) ao painel do estudante. Selecione uma opção abaixo:</p>
+  <ul>
+    <li><a href="{% url 'student_file_location' %}">Consultar Localização do Arquivo</a></li>
+    <li><a href="{% url 'student_contacts' %}">Consultar Contatos</a></li>
+    <li><a href="{% url 'student_pendencies' %}">Consultar Pendências</a></li>
+    <li><a href="{% url 'student_personal_data_maintenance_list' %}">Manutenção de Dados do Estudante</a></li>
+  </ul>
+  <a href="{% url 'select_category' %}" class="btn btn-secondary mt-3">Voltar para Seleção de Categoria</a>
+</div>
+{% endblock %}
+

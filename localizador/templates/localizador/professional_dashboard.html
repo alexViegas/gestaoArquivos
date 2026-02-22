@@ -1,0 +1,17 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Painel do Servidor - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Painel do Servidor</h2>
+  <p>Bem-vindo(a) ao painel do servidor. Selecione uma opção abaixo:</p>
+  <ul>
+    <li><a href="{% url 'professional_file_location' %}">Consultar Localização do Arquivo</a></li>
+    <li><a href="{% url 'professional_contracts' %}">Consultar Contratos</a></li>
+    <li><a href="{% url 'professional_personal_data_maintenance_list' %}">Manutenção de Dados do Servidor</a></li>
+  </ul>
+  <a href="{% url 'select_category' %}" class="btn btn-secondary mt-3">Voltar para Seleção de Categoria</a>
+</div>
+{% endblock %}
+

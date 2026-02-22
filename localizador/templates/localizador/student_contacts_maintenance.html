@@ -1,0 +1,18 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Manutenção de Contatos do Estudante - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Manutenção de Contatos do Estudante</h2>
+  <p>Formulário e lógica para inserir, editar e apagar contatos do estudante aqui.</p>
+  {# Exemplo de formulário (simplificado) #}
+  <form method="post">
+    {% csrf_token %}
+    {# Adicionar campos do formulário aqui #}
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+  </form>
+  <a href="{% url 'student_dashboard' %}" class="btn btn-secondary mt-3">Voltar ao Painel do Estudante</a>
+</div>
+{% endblock %}
+

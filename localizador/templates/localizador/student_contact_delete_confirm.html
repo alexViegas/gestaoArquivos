@@ -1,0 +1,16 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Confirmar Exclusão do Contato - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Confirmar Exclusão do Contato</h2>
+  <p>Você tem certeza que deseja excluir o contato "{{ contato.pessoa_contato }}" do aluno "{{ aluno.nome_aluno }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+    <a href="{% url 'student_contacts_maintenance_list' aluno.id_aluno_arquivo %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
+

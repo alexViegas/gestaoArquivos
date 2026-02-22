@@ -1,0 +1,79 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Localização de Arquivo do Servidor - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Localização do Arquivo do Servidor</h2>
+  
+  <!-- Campo de busca -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nome ou CPF...">
+    </div>
+    <div class="col-md-2">
+      <button type="button" id="clearSearch" class="btn btn-secondary">Limpar</button>
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Localização</th>
+        <th>Nome do Profissional</th>
+        <th>CPF</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="profissionaisTable">
+      {% for profissional in profissionais %}
+      <tr data-nome="{{ profissional.nome_profissional|lower }}" data-cpf="{{ profissional.cpf|default:'' }}">
+        <td>{{ profissional.localizacao_arquivo|default:"N/A" }}</td>
+        <td>{{ profissional.nome_profissional }}</td>
+        <td>{{ profissional.cpf }}</td>
+        <td>{{ profissional.status_arquivo_profissional }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">Nenhum profissional encontrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <a href="{% url 'professional_dashboard' %}" class="btn btn-secondary mt-3">Voltar ao Painel do Servidor</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearSearch');
+    const tableBody = document.getElementById('profissionaisTable');
+    const rows = tableBody.getElementsByTagName('tr');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const nome = row.getAttribute('data-nome') || '';
+            const cpf = row.getAttribute('data-cpf') || '';
+            
+            if (nome.includes(searchTerm) || cpf.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    
+    clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        filterTable();
+    });
+});
+</script>
+{% endblock %}
+

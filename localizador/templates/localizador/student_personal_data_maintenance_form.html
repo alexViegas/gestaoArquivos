@@ -1,0 +1,110 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}{% if aluno %}Editar Aluno{% else %}Adicionar Novo Aluno{% endif %} - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>{% if aluno %}Manutenção de Dados do Estudante: {{ aluno.nome_aluno }}{% else %}Adicionar Novo Aluno{% endif %}</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  
+  <!-- Dados Pessoais -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Dados Pessoais</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="save_aluno" value="1">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar Dados Pessoais</button>
+        {% if aluno %}
+          <a href="{% url 'generate_student_cover' aluno.id_aluno_arquivo %}" class="btn btn-success" target="_blank">Gerar Capa PDF</a>
+          <a href="{% url 'student_personal_data_delete' aluno.id_aluno_arquivo %}" class="btn btn-danger">Excluir Aluno</a>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+
+  {% if aluno %}
+  <!-- Contatos -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Contatos</h4>
+    </div>
+    <div class="card-body">
+      <a href="{% url 'student_contacts_maintenance_list' aluno.id_aluno_arquivo %}" class="btn btn-info">Gerenciar Contatos</a>
+      <a href="{% url 'student_contacts_create' aluno.id_aluno_arquivo %}" class="btn btn-primary">Adicionar Novo Contato</a>
+    </div>
+  </div>
+
+  <!-- Pendências -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Pendências</h4>
+    </div>
+    <div class="card-body">
+      <a href="{% url 'student_pendencies_maintenance_list' aluno.id_aluno_arquivo %}" class="btn btn-info">Gerenciar Pendências</a>
+      <a href="{% url 'student_pendencies_create' aluno.id_aluno_arquivo %}" class="btn btn-primary">Adicionar Nova Pendência</a>
+    </div>
+  </div>
+
+  <!-- Documentos -->
+  {% if document_form %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Documentos Anexados</h4>
+    </div>
+    <div class="card-body">
+      {% if documents %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nome do Arquivo</th>
+              <th>Tipo</th>
+              <th>Data de Upload</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for doc in documents %}
+            <tr>
+              <td>{{ doc.nome_arquivo }}</td>
+              <td>{{ doc.tipo_arquivo }}</td>
+              <td>{{ doc.data_upload|date:"d/m/Y H:i" }}</td>
+              <td>
+                <a href="{{ doc.arquivo.url }}" class="btn btn-sm btn-primary" target="_blank">Visualizar</a>
+                <a href="{% url 'delete_documento_vinculado' doc.id_documento %}" class="btn btn-sm btn-danger">Excluir</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Nenhum documento anexado.</p>
+      {% endif %}
+      
+      <hr>
+      <h5>Adicionar Novo Documento</h5>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="upload_documento" value="1">
+        {{ document_form.as_p }}
+        <button type="submit" class="btn btn-success">Enviar Documento</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+  <a href="{% url 'student_personal_data_maintenance_list' %}" class="btn btn-secondary">Voltar à Lista</a>
+</div>
+{% endblock %}
+

@@ -1,0 +1,18 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Manutenção de Dados Pessoais do Servidor - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Manutenção de Dados Pessoais do Servidor</h2>
+  <p>Formulário e lógica para inserir, editar e apagar dados pessoais do servidor aqui.</p>
+  {# Exemplo de formulário (simplificado) #}
+  <form method="post">
+    {% csrf_token %}
+    {# Adicionar campos do formulário aqui #}
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+  </form>
+  <a href="{% url 'professional_dashboard' %}" class="btn btn-secondary mt-3">Voltar ao Painel do Servidor</a>
+</div>
+{% endblock %}
+

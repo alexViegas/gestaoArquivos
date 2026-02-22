@@ -1,0 +1,94 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}{% if profissional %}Editar Servidor{% else %}Adicionar Novo Servidor{% endif %} - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% if profissional %}Manutenção de Dados do Servidor: {{profissional.nome_profissional }}{% else %}Adicionar Novo Servidor{% endif %}</h2>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" arialabel="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <!-- Dados Pessoais -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Dados Pessoais</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="save_profissional" value="1">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar Dados Pessoais</button>
+        {% if profissional and profissional.id_profissional_arquivo %}
+          <a href="{% url 'generate_professional_cover' profissional.id_profissional_arquivo %}" class="btn btn-success" target="_blank">Gerar Capa PDF</a>
+          <a href="{% url 'professional_personal_data_delete' profissional.id_profissional_arquivo %}" class="btn btn-danger">Excluir Servidor</a>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+  <!-- Contratos -->
+  {% if profissional and profissional.id_profissional_arquivo %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Contratos</h4>
+    </div>
+    <div class="card-body">
+      <a href="{% url 'professional_contracts_maintenance_list' profissional.id_profissional_arquivo %}" class="btn btn-info">Gerenciar Contratos</a>
+      <a href="{% url 'professional_contracts_create' profissional.id_profissional_arquivo %}" class="btn btn-primary">Adicionar Novo Contrato</a>
+    </div>
+  </div>
+  {% endif %}
+  <!-- Documentos -->
+  {% if document_form %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Documentos Anexados</h4>
+    </div>
+    <div class="card-body">
+      {% if documents %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nome do Arquivo</th>
+              <th>Tipo</th>
+              <th>Data de Upload</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for doc in documents %}
+            <tr>
+              <td>{{ doc.nome_arquivo }}</td>
+              <td>{{ doc.tipo_arquivo }}</td>
+              <td>{{ doc.data_upload|date:"d/m/Y H:i" }}</td>
+              <td>
+                <a href="{{ doc.arquivo.url }}" class="btn btn-sm btn-primary" target="_blank">Visualizar</a>
+                <a href="{% url 'delete_documento_vinculado' doc.id_documento %}" class="btn btn-sm btn-danger">Excluir</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Nenhum documento anexado.</p>
+      {% endif %}
+      <hr>
+      <h5>Adicionar Novo Documento</h5>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="upload_documento" value="1">
+        {{ document_form.as_p }}
+        <button type="submit" class="btn btn-success">Enviar Documento</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  <a href="{% url 'professional_personal_data_maintenance_list' %}" class="btn btn-secondary">Voltar à Lista</a>
+</div>
+{% endblock %}
+

@@ -1,0 +1,43 @@
+{% extends 'localizador/base.html' %}
+
+{% block title %}Login - Gestão de Arquivos Escolares{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-4">
+    <div class="text-center mb-4">
+      {# Placeholder para o logo da unidade de ensino #}
+      {# Você pode adicionar uma tag <img> aqui quando tiver o logo #}
+      <h3>Logo da Unidade</h3> 
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">Login</h4>
+        {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
+            Por favor, corrija os erros abaixo.
+          </div>
+        {% endif %}
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="username" class="form-label">Usuário</label>
+            <input type="text" class="form-control" name="username" id="username" required autofocus>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" class="form-control" name="password" id="password" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+        <p>Não tem uma conta? <a href="#">Registre-se</a></p> {# Link de registro pode ser implementado depois #}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

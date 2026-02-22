@@ -1,0 +1,25 @@
+{
+    "python.defaultInterpreterPath": "./venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length=88"],
+    "files.associations": {
+        "*.html": "html",
+        "*.py": "python"
+    },
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/migrations": false
+    },
+    "python.analysis.extraPaths": [
+        "./",
+        "./localizador"
+    ]
+}
+
