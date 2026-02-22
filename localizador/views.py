@@ -261,10 +261,14 @@ def student_personal_data_maintenance_view(request, aluno_id=None):
                 aluno_salvo = form.save(commit=False)
                 if not aluno_instance:
                     try:
-                        usuario_obj = Usuario.objects.first()
-                        if not usuario_obj:
-                            usuario_obj = Usuario.objects.create(nome_usuario="Admin Default", login=f"admin_default_{Aluno_Arquivo.objects.count() + 1}", email_usuario=f"admin{Aluno_Arquivo.objects.count() + 1}@example.com", cpf_usuario=f"0000000000{Aluno_Arquivo.objects.count() + 1}", status_usuario="A", senha_usuario="password")
-                        aluno_salvo.usuario = usuario_obj
+                        if request.user.is_authenticated:
+                            aluno_salvo.usuario = request.user
+                        else:
+                            if not Usuario.objects.exists():
+                                usuario_obj = Usuario.objects.create_user(username=f"admin_default_{Aluno_Arquivo.objects.count() + 1}", email=f"admin{Aluno_Arquivo.objects.count() + 1}@example.com", password="password", first_name="Admin Default", cpf_usuario=f"0000000000{Aluno_Arquivo.objects.count() + 1}", status_usuario="A")
+                            else:
+                                usuario_obj = Usuario.objects.first()
+                            aluno_salvo.usuario = usuario_obj
                     except Exception as e:
                         messages.error(request, f"Erro ao associar usuário: {e}.")
                         return render(request, 'localizador/student_personal_data_maintenance_form.html', {'form': form, 'aluno': aluno_instance, 'page_title': page_title, 'button_text': button_text, 'document_form': document_form, 'documents': documents})
@@ -469,10 +473,14 @@ def professional_personal_data_maintenance_view(request, profissional_id=None):
 
                 if not profissional_instance:
                     try:
-                        usuario_obj = Usuario.objects.first()
-                        if not usuario_obj:
-                             usuario_obj = Usuario.objects.create(nome_usuario="Admin Default Prof", login=f"admin_default_prof_{Profissional_Arquivo.objects.count() +1}", email_usuario=f"admin_prof{Profissional_Arquivo.objects.count()+1}@example.com", cpf_usuario=f"0000000001{Profissional_Arquivo.objects.count()+1}", status_usuario="A", senha_usuario="password")
-                        profissional_salvo.usuario = usuario_obj
+                        if request.user.is_authenticated:
+                            profissional_salvo.usuario = request.user
+                        else:
+                            if not Usuario.objects.exists():
+                                usuario_obj = Usuario.objects.create_user(username=f"admin_default_{Profissional_Arquivo.objects.count() + 1}", email=f"admin{Profissional_Arquivo.objects.count() + 1}@example.com", password="password", first_name="Admin Default", cpf_usuario=f"0000000000{Profissional_Arquivo.objects.count() + 1}", status_usuario="A")
+                            else:
+                                usuario_obj = Usuario.objects.first()
+                            profissional_salvo.usuario = usuario_obj
                     except Exception as e:
                         messages.error(request, f"Erro ao associar usuário ao profissional: {e}.")
                         return render(request, 'localizador/professional_personal_data_maintenance_form.html', {'form': form, 'profissional': profissional_instance, 'page_title': page_title, 'button_text': button_text, 'document_form': document_form, 'documents': documents})

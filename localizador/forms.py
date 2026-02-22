@@ -4,9 +4,9 @@ from .models import DocumentoVinculado, Usuario, Profissional_Arquivo, Contrato,
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ["nome_usuario", "login", "email_usuario", "cpf_usuario", "status_usuario", "senha_usuario"]
+        fields = ["username", "first_name", "email", "cpf_usuario", "status_usuario", "password"]
         widgets = {
-            "senha_usuario": forms.PasswordInput(),
+            "password": forms.PasswordInput(),
         }
 
 class ProfissionalArquivoForm(forms.ModelForm):

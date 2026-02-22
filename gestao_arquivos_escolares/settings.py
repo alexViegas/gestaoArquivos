@@ -129,3 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'select_category'
 LOGOUT_REDIRECT_URL = 'login'
+
+
+AUTH_USER_MODEL = 'localizador.Usuario'

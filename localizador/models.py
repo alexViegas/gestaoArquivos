@@ -2,6 +2,7 @@ from django.db import models, transaction
 from django.db.models import Max
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
 
 # It's highly recommended to use Django's built-in User model (django.contrib.auth.models.User)
 # or extend AbstractUser/AbstractBaseUser for custom user models.
@@ -9,17 +10,17 @@ from django.dispatch import receiver
 # Password management (hashing, checking) needs to be handled carefully if this model is used for authentication
 # without leveraging Django's built-in auth mechanisms for its User model.
 
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
-    nome_usuario = models.CharField(max_length=100, default='Usuário Teste')
-    login = models.CharField(max_length=16, unique=True, default= 'admin' )
-    email_usuario = models.EmailField(max_length=50, unique=True,  default='teste@email.com' )
-    cpf_usuario = models.CharField(max_length=14, unique=True, default= '12345678900') # Consider using a validator for CPF format
-    status_usuario = models.CharField(max_length=1) # Consider using choices for status
-    senha_usuario = models.CharField(max_length=128, default='senha123')
+class Usuario(AbstractUser):
+    
+    cpf_usuario = models.CharField(max_length=14, unique=True, blank=True, default= '12345678900') # Consider using a validator for CPF format
+    status_usuario = models.CharField(max_length=1, default='A') # Consider using choices for status
+    
+    USERNAME_FIELD = 'cpf_usuario' # Use CPF as the unique identifier for authentication
+    REQUIRED_FIELDS = ['email'] # No additional fields required for creating a superuser
 
     def __str__(self):
-        return self.nome_usuario
+        return self.username
+    
 
 class NumeroPassivoDisponivel(models.Model):
     numero = models.IntegerField(unique=True, primary_key=True)
