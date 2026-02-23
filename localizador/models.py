@@ -2,7 +2,8 @@ from django.db import models, transaction
 from django.db.models import Max
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
 
 # It's highly recommended to use Django's built-in User model (django.contrib.auth.models.User)
 # or extend AbstractUser/AbstractBaseUser for custom user models.
@@ -12,10 +13,17 @@ from django.contrib.auth.models import AbstractUser
 
 class Usuario(AbstractUser):
     
-    cpf_usuario = models.CharField(max_length=14, unique=True, blank=True, default= '12345678900') # Consider using a validator for CPF format
-    status_usuario = models.CharField(max_length=1, default='A') # Consider using choices for status
+    cpf_usuario = models.CharField(max_length=14, unique=True) # Consider using a validator for CPF format
+    status_usuario = models.CharField(
+        max_length=1,
+        choices=[
+            ('A', 'Ativo'),
+            ('I', 'Inativo')
+        ],
+        default='A'
+    ) # Consider using choices for status
     
-    USERNAME_FIELD = 'cpf_usuario' # Use CPF as the unique identifier for authentication
+    USERNAME_FIELD = 'username' # Use CPF as the unique identifier for authentication
     REQUIRED_FIELDS = ['email'] # No additional fields required for creating a superuser
 
     def __str__(self):
