@@ -1,5 +1,8 @@
 from django import forms
 from .models import DocumentoVinculado, Usuario, Profissional_Arquivo, Contrato, Aluno_Arquivo, Contato, Pendencia
+from .utils import get_numeros_disponiveis, get_next_numero_passivo, release_numero_passivo
+
+
 
 class UsuarioForm(forms.ModelForm):
     class Meta:
@@ -13,6 +16,18 @@ class ProfissionalArquivoForm(forms.ModelForm):
     class Meta:
         model = Profissional_Arquivo
         fields = ["nome_profissional", "cpf", "status_arquivo_profissional", "localizacao_arquivo"]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        numeros = get_numeros_disponiveis('P')
+
+        self.fields["localizacao_arquivo"].widget = forms.Select(
+            choices=[(n, n) for n in numeros]
+        )
+
+        self.fields["status_arquivo_profissional"].widget = forms.Select(
+            choices=[('A', 'Ativo'),('P', 'Permanente')]
+        )
 
 class ContratoForm(forms.ModelForm):
     class Meta:
@@ -27,6 +42,18 @@ class AlunoArquivoForm(forms.ModelForm):
     class Meta:
         model = Aluno_Arquivo
         fields = ["status_arquivo_aluno", "cod_sistema", "nome_aluno", "cpf", "localizacao_arquivo"] # Removed usuario, should be set automatically
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        numeros = get_numeros_disponiveis('A')
+
+        self.fields["localizacao_arquivo"].widget = forms.Select(
+            choices=[(n, n) for n in numeros]
+        )
+        self.fields["status_arquivo_aluno"].widget = forms.Select(
+            choices=[('A', 'Ativo'),('P', 'Permanente')]
+        )
 
 class ContatoForm(forms.ModelForm):
     class Meta:

@@ -5,13 +5,14 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import (Aluno_Arquivo, Contato, Pendencia, 
                    Profissional_Arquivo, Contrato, Usuario, 
-                   DocumentoVinculado, get_next_numero_passivo) # Adicionado DocumentoVinculado
+                   DocumentoVinculado) # Adicionado DocumentoVinculado
 from .forms import (AlunoArquivoForm, ContatoForm, PendenciaForm, 
                   ProfissionalArquivoForm, ContratoForm, UsuarioForm, 
                   DocumentoVinculadoForm) # Adicionado DocumentoVinculadoForm
 from django.http import HttpResponse
 from fpdf import FPDF
 from django.contrib.contenttypes.models import ContentType # Para GenericForeignKey
+from .utils import get_numeros_disponiveis, get_next_numero_passivo, release_numero_passivo
 
 
 class PDFCapaBase(FPDF):
@@ -174,7 +175,7 @@ def generate_professional_cover_pdf(request, profissional_id):
         pdf.cell(label_section_width, line_height, funcao_valor, 0, 1, 'L')
         current_y = pdf.get_y() + 3
 
-        # Admissão (exemplo da imagem: ADMISSÃO 01/02/2000; EFETIVA.)
+        # Admissão (ADMISSÃO 01/02/2000; EFETIVA.)
         # Isso pode vir de dt_inicial e tipo_contrato
         admissao_str = f"ADMISSÃO {contrato_recente.dt_inicial.strftime('%d/%m/%Y') if contrato_recente.dt_inicial else 'N/A'}"
         if contrato_recente.tipo_contrato:
