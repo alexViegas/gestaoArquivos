@@ -94,7 +94,7 @@ class Profissional_Arquivo(models.Model):
 
         if self.pk:
         # está editando
-            antigo = Aluno_Arquivo.objects.get(pk=self.pk)
+            antigo = Profissional_Arquivo.objects.get(pk=self.pk)
 
             if antigo.localizacao_arquivo != self.localizacao_arquivo:
             # devolve número antigo
