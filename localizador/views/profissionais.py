@@ -55,7 +55,7 @@ def professional_personal_data_maintenance_view(request, profissional_id=None):
                 
                 if not profissional_instance and not profissional_salvo.localizacao_arquivo:
                     try:
-                        profissional_salvo.localizacao_arquivo = get_next_numero_passivo()
+                        profissional_salvo.localizacao_arquivo = get_next_numero_passivo('P')
                     except Exception as e:
                         messages.error(request, f"Erro ao gerar número de localização: {e}.")
                         return render(request, 'localizador/professional_personal_data_maintenance_form.html', {'form': form,
