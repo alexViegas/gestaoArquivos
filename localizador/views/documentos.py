@@ -14,6 +14,10 @@ from fpdf import FPDF
 from django.contrib.contenttypes.models import ContentType # Para GenericForeignKey
 from ..utils import get_numeros_disponiveis, get_next_numero_passivo, release_numero_passivo
 
+@login_required
+def select_category(request):
+    return render(request, 'localizador/select_category.html')
+
 # --- View para consulta de documentos --- 
 @login_required
 def consultar_documentos_view(request):
