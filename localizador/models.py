@@ -119,8 +119,6 @@ class Profissional_Arquivo(models.Model):
 
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.nome_aluno
 
     def __str__(self):
         return self.nome_profissional
